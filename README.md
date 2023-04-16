@@ -1,46 +1,82 @@
-# Getting Started with Create React App
+# React Multi Select App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This app was created in order to fulfill requirements of the assignment as part of job application process.
 
-## Available Scripts
+GitHub repo: https://github.com/ekatamel/faceup.
 
-In the project directory, you can run:
+The basic functionality of this app is MultiSelect component, which renders different options and allows user to easily choose multiple options from the list and manipulate with them (e.g. delete).
 
-### `npm start`
+**Upgrade**: on branch feat/add-own-options (https://github.com/ekatamel/faceup/tree/feat/add-own-options) you can find upgraded version of MultiSelect component, which accepts user input as an option and adds it on Enter press. This user option cannot be the same as any option already provided in data. When user option is deleted, it won't become part of the original data.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Tech stack
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+For the project I used following technologies:
 
-### `npm test`
+- React
+- TypeScript (type definition and type checking)
+- TailwindCSS (styling)
+- Clsx (for easier conditional styling)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Local development environment
 
-### `npm run build`
+In order to set up local development environment, follow these steps:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Prerequisites
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- Node 14 or higher
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Clone the project repository from GitHub:
 
-### `npm run eject`
+```shell script
+git clone https://github.com/ekatamel/faceup.git
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+2. Navigate to the project directory:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```shell script
+cd your-project
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+3. Run frontend
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```shell script
+npm start
+```
 
-## Learn More
+## MultiSelect component logic
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+The MultiSelect component is a reusable React component that provides a dropdown menu for selecting multiple items from a list of options.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Accepted properties:
+
+- `data`: An array of objects that represent the available options. Each object should have a value property (a unique identifier for the option) and a label property (the text to display for the option).
+- `label`: A string that represents the label for the MultiSelect component.
+- `placeholder`: A string that represents the placeholder text to display when no items are selected.
+
+### Usage:
+
+To use the MultiSelect component in your React application, import the component and render it with the necessary props:
+
+```
+import { MultiSelect } from './components/MultiSelect';
+
+const options = [
+  { value: '1', label: 'Option 1' },
+  { value: '2', label: 'Option 2' },
+  { value: '3', label: 'Option 3' },
+];
+
+function MyComponent() {
+  return (
+    <MultiSelect
+      data={options}
+      label="Select options"
+      placeholder="Select options"
+    />
+  );
+}
+```
+
+The MultiSelect component will render a dropdown menu with the available options. When the user clicks on an option, it will be added to the selected items list. Clicking on a selected item close icon will remove this item from the selected items list and add it back to the available options list. The selected items list will be displayed as a list of tags above the dropdown menu.
+
+To show all available options, user can click on the "input". Clicking outside of options will close the menu.
