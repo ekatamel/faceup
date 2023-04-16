@@ -4,6 +4,7 @@ import { clsx } from "clsx";
 import { useOutsideClick } from "../utils/utils";
 import { ReactComponent as SelectIcon } from "../icons/select.svg";
 import { ReactComponent as CloseIcon } from "../icons/close.svg";
+import { Option } from "./Option";
 
 interface Props {
   data: SelectItem[];
@@ -12,13 +13,13 @@ interface Props {
 }
 
 export const MultiSelect = ({ data, label, placeholder }: Props) => {
-  const [availableItems, setAvailableItems] = useState(data);
+  const [remainingItems, setRemainingItems] = useState(data);
   const [selectedItems, setSelectedItems] = useState<SelectItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
 
   const areItemsSelected = selectedItems.length > 0;
-  const areItemsRemaining = availableItems.length > 0;
+  const areItemsRemaining = remainingItems.length > 0;
 
   const selectRef = useRef<HTMLDivElement | null>(null);
 
@@ -29,7 +30,7 @@ export const MultiSelect = ({ data, label, placeholder }: Props) => {
         (item) => item.value === selectedValue
       );
       const arrayToRemoveItem =
-        action === ItemAction.Add ? availableItems : selectedItems;
+        action === ItemAction.Add ? remainingItems : selectedItems;
 
       const chosenItemIndex = arrayToRemoveItem.findIndex(
         (item) => item.value === selectedValue
@@ -40,7 +41,7 @@ export const MultiSelect = ({ data, label, placeholder }: Props) => {
         updatedItems.splice(chosenItemIndex, 1);
 
         itemInOriginalData &&
-          setAvailableItems((prevItems) =>
+          setRemainingItems((prevItems) =>
             action === ItemAction.Add
               ? updatedItems
               : [...prevItems, chosenItemToRemove]
@@ -52,7 +53,7 @@ export const MultiSelect = ({ data, label, placeholder }: Props) => {
         );
       }
     },
-    [availableItems, selectedItems, data]
+    [remainingItems, selectedItems, data]
   );
 
   const addOwnItem = (
@@ -127,16 +128,14 @@ export const MultiSelect = ({ data, label, placeholder }: Props) => {
             isOpen ? "scale-y-100" : "scale-y-0"
           )}
         >
-          {availableItems.map((availableItem) => {
-            const { value, label } = availableItem;
+          {remainingItems.map((remainingItem) => {
             return (
-              <li
-                key={value}
-                onClick={(e) => handleItemClick(e, value, ItemAction.Add)}
+              <Option
+                item={remainingItem}
+                handleItemClick={handleItemClick}
+                action={ItemAction.Add}
                 className="cursor-pointer px-20 py-12 rounded hover:bg-lightGray w-full"
-              >
-                {label}
-              </li>
+              />
             );
           })}
         </ul>
