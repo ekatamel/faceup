@@ -5,6 +5,7 @@ import { useOutsideClick } from "../utils/utils";
 import { ReactComponent as SelectIcon } from "../icons/select.svg";
 import { ReactComponent as CloseIcon } from "../icons/close.svg";
 import { Option } from "./Option";
+import { TextInput } from "./TextInput";
 
 interface Props {
   data: SelectItem[];
@@ -35,47 +36,27 @@ export const MultiSelect = ({ data, label, placeholder }: Props) => {
       const chosenItemIndex = arrayToRemoveItem.findIndex(
         (item) => item.value === selectedValue
       );
-      if (chosenItemIndex !== -1) {
-        const updatedItems = [...arrayToRemoveItem];
-        const chosenItemToRemove = arrayToRemoveItem[chosenItemIndex];
-        updatedItems.splice(chosenItemIndex, 1);
 
-        itemInOriginalData &&
-          setRemainingItems((prevItems) =>
-            action === ItemAction.Add
-              ? updatedItems
-              : [...prevItems, chosenItemToRemove]
-          );
-        setSelectedItems((prevItems) =>
+      if (chosenItemIndex === -1) return;
+
+      const updatedItems = [...arrayToRemoveItem];
+      const chosenItemToRemove = arrayToRemoveItem[chosenItemIndex];
+      updatedItems.splice(chosenItemIndex, 1);
+
+      itemInOriginalData &&
+        setRemainingItems((prevItems) =>
           action === ItemAction.Add
-            ? [...prevItems, chosenItemToRemove]
-            : updatedItems
+            ? updatedItems
+            : [...prevItems, chosenItemToRemove]
         );
-      }
+      setSelectedItems((prevItems) =>
+        action === ItemAction.Add
+          ? [...prevItems, chosenItemToRemove]
+          : updatedItems
+      );
     },
     [remainingItems, selectedItems, data]
   );
-
-  const addOwnItem = (
-    e: React.KeyboardEvent<HTMLInputElement>,
-    inputValue: string
-  ) => {
-    const trimmedValue = inputValue.trim();
-    if (e.code === "Enter" && trimmedValue !== "") {
-      if (trimmedValue.length > 10)
-        return alert(`You are only allowed to add maximum 10 characters!`);
-      const duplicateItem = data.find(
-        (item) => item.label.toLowerCase() === trimmedValue.toLowerCase()
-      );
-      if (duplicateItem)
-        return alert(`You already have ${trimmedValue} in the option list!`);
-      setSelectedItems((prevItems) => [
-        ...prevItems,
-        { value: trimmedValue.toLowerCase(), label: trimmedValue },
-      ]);
-      setInputValue("");
-    }
-  };
 
   useOutsideClick(selectRef, () => setIsOpen(false));
 
@@ -109,13 +90,13 @@ export const MultiSelect = ({ data, label, placeholder }: Props) => {
                 </li>
               );
             })}
-          <input
-            type="text"
-            className="border-none outline-none bg-transparent grow"
-            placeholder={!areItemsSelected ? placeholder : ""}
-            onKeyDown={(e) => addOwnItem(e, inputValue)}
-            onChange={(e) => setInputValue(e.target.value)}
-            value={inputValue}
+          <TextInput
+            data={data}
+            inputValue={inputValue}
+            setInputValue={setInputValue}
+            placeholder={placeholder}
+            selectedItems={selectedItems}
+            setSelectedItems={setSelectedItems}
           />
         </ul>
 
