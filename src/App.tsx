@@ -1,24 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./index.css";
+import { MultiSelect } from "./components/MultiSelect";
+import { data } from "./utils/data";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="w-500 m-auto mt-52">
+      <h1 className="text-32 font-bold text-blue mb-12 text-center">
+        Best frontend framework
+      </h1>
+      <h2 className="font-bold text-22 mb-20">
+        You can select multiple frontend frameworks or libraries you like to
+        work with.
+      </h2>
+      <MultiSelect
+        data={data}
+        label={"Your favourite frameworks/libraries:"}
+        placeholder={"Pick all that you like"}
+      />
     </div>
   );
 }
